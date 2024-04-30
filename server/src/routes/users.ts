@@ -9,14 +9,15 @@ class UsersRoutes {
     this.initializeRoutes();
   }
 
-  private initializeRoutes() {
+  private initializeRoutes = (): void => {
     this.router.get("", this.userController.getUsers);
     this.router.get("/:user_id", this.userController.getUserById);
-  }
+    this.router.post("/create-user", this.userController.createUser);
+  };
 
-  public get userRoutes(): Router {
+  public userRoutes = (): Router => {
     return this.router;
-  }
+  };
 }
 
 export default UsersRoutes;

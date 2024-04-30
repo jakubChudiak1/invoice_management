@@ -6,30 +6,42 @@ class UserController {
 
   constructor() {
     this.userService = new UserService();
-    this.getUsers = this.getUsers.bind(this);
-    this.getUserById = this.getUserById.bind(this);
   }
 
-  public async getUsers(req: Request, res: Response) {
+  public getUsers = async (req: Request, res: Response): Promise<void> => {
     try {
       const users = await this.userService.getUsers();
       res.status(200).json(users);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: error });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
-  }
+  };
 
-  public async getUserById(req: Request, res: Response) {
+  public getUserById = async (req: Request, res: Response): Promise<void> => {
     try {
       const { user_id } = req.params;
       const user = await this.userService.getUserById(+user_id);
+      console.log(user);
       res.status(200).json(user);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: error });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
-  }
+  };
+
+  public createUser = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { email, first_name, surname, password } = req.body;
+      const newUser = await this.userService.createUser({
+        email: email,
+        first_name: first_name,
+        surname: surname,
+        password: password,
+      });
+      res.status(200).json({ message: "User succesfully created" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 }
 
 export default UserController;
