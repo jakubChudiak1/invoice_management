@@ -4,6 +4,8 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type Timestamp = ColumnType<Date, Date | string, Date | string>;
+
 export interface Files {
   file_id: Generated<number>;
   invoice_id: number;
@@ -16,7 +18,8 @@ export interface Groups {
 }
 
 export interface InvoiceFolders {
-  folder_id: number;
+  created_at: Timestamp;
+  folder_id: Generated<number>;
   name: string;
   root_folder: number | null;
   user_id: number;
@@ -35,6 +38,7 @@ export interface Languages {
 }
 
 export interface Notifications {
+  created_at: Timestamp;
   description: string;
   is_read: Generated<boolean>;
   notification_id: Generated<number>;

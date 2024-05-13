@@ -15,20 +15,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const userService_1 = __importDefault(require("@src/services/userService"));
 class UserController {
     constructor() {
-        this.userService = new userService_1.default();
-        this.getUsers = this.getUsers.bind(this);
-    }
-    getUsers(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.getUsers = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const users = yield this.userService.getUsers();
                 res.status(200).json(users);
             }
             catch (error) {
-                console.log(error);
-                res.status(500).json({ message: error });
+                res.status(500).json({ message: error.message });
             }
         });
+        this.getUserById = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { user_id } = req.params;
+                const user = yield this.userService.getUserById(+user_id);
+                console.log(user);
+                res.status(200).json(user);
+            }
+            catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+        this.userService = new userService_1.default();
     }
 }
 exports.default = UserController;

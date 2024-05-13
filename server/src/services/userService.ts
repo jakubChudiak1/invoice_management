@@ -6,10 +6,12 @@ class UserService {
 
   public getUsers = async () => {
     const users = await db
-      .selectFrom("users")
+      .selectFrom("users as u")
       .select([
         "user_id",
-        "email",
+        "u.email",
+        "first_name",
+        "surname",
         sql<string>`concat(first_name, ' ', surname)`.as("full_name"),
         "is_verified",
       ])
@@ -23,10 +25,29 @@ class UserService {
       .select([
         "user_id",
         "email",
+        "first_name",
+        "surname",
         sql<string>`concat(first_name, ' ', surname)`.as("full_name"),
         "is_verified",
       ])
       .where("user_id", "=", userId)
+      .executeTakeFirst();
+    return user;
+  };
+
+  public getUserByEmail = async (userEmail: string) => {
+    const user = await db
+      .selectFrom("users")
+      .select([
+        "user_id",
+        "email",
+        "first_name",
+        "surname",
+        sql<string>`concat(first_name, ' ', surname)`.as("full_name"),
+        "password",
+        "is_verified",
+      ])
+      .where("email", "=", userEmail)
       .executeTakeFirst();
     return user;
   };
@@ -43,6 +64,15 @@ class UserService {
       })
       .executeTakeFirst();
     return newUser.insertId;
+  };
+
+  public verifyUser = async (userId: number, isVerified: boolean) => {
+    const verifiedUser = await db
+      .updateTable("users")
+      .set({ is_verified: isVerified })
+      .where("user_id", "=", userId)
+      .executeTakeFirst();
+    return verifiedUser;
   };
 }
 
