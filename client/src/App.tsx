@@ -1,18 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGetUsersQuery } from "./services/userEndpoints";
 import { useGetUserByIdQuery } from "./services/userEndpoints";
 
 function App() {
-  const { data: users } = useGetUsersQuery();
-  const { data: user } = useGetUserByIdQuery(1);
-  return (
-    <>
-      {user?.email}
-      {users?.map((user) => (
-        <p key={user.user_id}>{user.is_verified}</p>
-      ))}
-    </>
-  );
+  return <div className="h-screen w-screen relative"></div>;
 }
 
 export default App;
